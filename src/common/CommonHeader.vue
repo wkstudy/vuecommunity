@@ -63,7 +63,7 @@ header > div{
   line-height: 2.5rem;
 }
 .header-search span {
-  font-size: 2.8rem;
+  font-size: 2rem;
 }
 .header-search input {
   border: none;
