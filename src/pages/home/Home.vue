@@ -13,6 +13,7 @@
         <a href="javascript:void(0)" v-bind:class="{active: job}" @click="goToPage('job')">招聘</a>
       </nav>
       <home-list></home-list>
+      <home-page></home-page>
     </div>
   </div>
   <common-footer></common-footer>
@@ -22,6 +23,7 @@
 import CommonHeader from '@/common/CommonHeader.vue'
 import CommonFooter from '@/common/CommonFooter.vue'
 import HomeList from '@/pages/home/components/HomeList.vue'
+import HomePage from '@/pages/home/components/HomePage.vue'
 export default {
   name: 'Home.vue',
   data () {
@@ -37,20 +39,22 @@ export default {
   components: {
     CommonHeader,
     CommonFooter,
-    HomeList
+    HomeList,
+    HomePage
   },
   beforeRouteUpdate (to, from, next) {
     var _this = this,
       old = from.query.tab,
       latest = to.query.tab
-    if (old === undefined) {
-      _this['all'] = false
-      _this[latest] = true
-    } else if (latest === undefined) {
+    if (latest === undefined) {
       _this[old] = false
       _this['all'] = true
     } else {
-      _this[old] = false
+      if (old === undefined) {
+        _this['all'] = false
+      } else {
+        _this[old] = false
+      }
       _this[latest] = true
     }
     next()

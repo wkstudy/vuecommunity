@@ -9,7 +9,9 @@
         <span class="list-time">{{list.create_at|cancelTime(now)}}</span>
       </li>
     </ul>
-    <common-loading v-else></common-loading>
+    <div v-else id="loading-bg">
+      <common-loading></common-loading>
+    </div>
   </div>
 </template>
 <script>
@@ -27,22 +29,21 @@ export default {
     }
   },
   watch: {
-    '$route.query.tab' (val) {
+    '$route.query' (obj) {
       var _this = this
 
       _this.isLoading = false
-      _this.getHomeData(val)
+      _this.getHomeData(obj)
     }
   },
   methods: {
-    getHomeData (val) {
+    getHomeData (obj) {
       var _this = this,
         url = '/api/v1/topics'
 
-      if (val !== undefined) {
-        url += '?tab=' + val
-      }
-      _this.axios.get(url)
+      _this.axios.get(url, {
+        params: obj
+      })
         .then((response) => {
           _this.lists = response.data.data
           _this.isLoading = true
@@ -106,6 +107,7 @@ ul
   list-style-type none
   padding-left 0
   margin-top 0
+  margin-bottom 0
   li
     padding 1rem
     background-color #fff
@@ -147,4 +149,6 @@ ul
       right 1rem
       font-size 1.2rem
       top 1.9rem
+#loading-bg
+  min-height 50rem
 </style>
