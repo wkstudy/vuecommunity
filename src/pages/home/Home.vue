@@ -2,7 +2,7 @@
 <main>
   <common-header></common-header>
   <div class="content">
-    <aside>sss</aside>
+    <common-side-bar :pageType='pageType' :pageInfo= 'pageInfo'></common-side-bar>
     <div class="cnt">
       <nav>
         <a href="javascript:void(0)" v-bind:class="{active: all}" @click="goToPage()">全部</a>
@@ -24,6 +24,8 @@ import CommonHeader from '@/common/CommonHeader.vue'
 import CommonFooter from '@/common/CommonFooter.vue'
 import HomeList from '@/pages/home/components/HomeList.vue'
 import HomePage from '@/pages/home/components/HomePage.vue'
+import CommonSideBar from '@/common/CommonSideBar/CommonSideBar.vue'
+import Cookie from '@/assets/js/cookie.js'
 export default {
   name: 'Home.vue',
   data () {
@@ -33,14 +35,17 @@ export default {
       weex: false,
       ask: false,
       share: false,
-      job: false
+      job: false,
+      pageType: 1, // 1表示首页，二表示话题页
+      pageInfo: null
     }
   },
   components: {
     CommonHeader,
     CommonFooter,
     HomeList,
-    HomePage
+    HomePage,
+    CommonSideBar
   },
   beforeRouteUpdate (to, from, next) {
     var _this = this,
@@ -61,11 +66,37 @@ export default {
   },
   created () {
     var _this = this,
-      tab = _this.$route.query.tab
+      tab = _this.$route.query.tab,
+      akn,
+      expire
     if (tab === undefined) {
       _this['all'] = true
     } else {
       _this[tab] = true
+    }
+
+    //  由于此时还没做登录，所以在这直接写akn到cookie中
+    expire = new Date()
+    if (!Cookie.get('akn')) {
+      Cookie.set('akn', '11c07078-4695-4748-a40b-af35f152375e', expire.setTime(expire.getTime() + 30 * 24 * 60 * 60 * 1000), '/', 'localhost')
+    }
+
+    //  获取作者信息
+    if (Cookie.get('akn')) {
+      akn = Cookie.get('akn')
+      _this.axios.post('/api/v1/accesstoken ', {
+        accesstoken: akn
+      }).then(function (response) {
+        var data = response.data
+        if (data.success) {
+          _this.axios.get('api/v1/user/' + data.loginname)
+            .then(function (response) {
+              if (response.status === 200) {
+                _this.pageInfo = response.data.data
+              }
+            })
+        }
+      })
     }
   },
   methods: {

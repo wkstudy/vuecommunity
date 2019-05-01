@@ -1,0 +1,91 @@
+<template>
+  <aside>
+    <div v-if="showInfo">
+      <button>请登录</button>
+    </div>
+    <info-panel v-else :pageType='pageType' :pageInfo='pageInfo'></info-panel>
+    <div v-if="pageType != 2" class="publish-topic">
+      <button>发布话题</button>
+    </div>
+    <aside class="advertisement">
+      <img src="@/assets/logo.png" alt="picture" title="vuejs中文社区" @click="goToWeb()">
+    </aside>
+    <topic-panel :topicList='pageInfo.recent_topics.slice(0, 5)' :topicType='"recent"'></topic-panel>
+    <topic-panel :topicList='noReplyLIst.slice(0, 5)' :topicType='"noreply"'></topic-panel>
+  </aside>
+</template>
+<script>
+import InfoPanel from './components/InfoPanel.vue'
+import TopicPanel from './components/TopicPanel.vue'
+export default {
+  name: 'CommonSideBar.vue',
+  props: {
+    pageType: {
+      required: true,
+      type: Number
+    },
+    pageInfo: {
+      required: true
+    }
+  },
+  data () {
+    return {
+      showInfo: true, // 显示登录框还是 信息面板
+      noReplyLIst: []
+    }
+  },
+  components: {
+    InfoPanel,
+    TopicPanel
+  },
+  beforeCreate () {
+    //  由于没有无人回复话题的api,统一在这获取5个话题
+    var _this = this
+    _this.axios.get('/api/v1/topics', {
+      params: {
+        tab: 'all',
+        limit: 5
+      }
+    }).then(function (response) {
+      if (response.status === 200) {
+        _this.noReplyLIst = response.data.data
+      }
+    })
+  },
+  created () {
+    var _this = this
+    if (_this.pageType === 1 && _this.pageInfo === null) {
+      this.showInfo = false
+    }
+  },
+  methods: {
+    goToWeb () {
+      window.location.href = 'https://www.vue-js.com/'
+    }
+  }
+}
+</script>
+<style lang="stylus" scoped>
+.publish-topic
+  margin-top 1.3rem
+  padding 1rem
+  background-color #fff
+  button
+    color #ffffff
+    font-size 1.4rem
+    background-color #369219
+    line-height 2rem
+    padding 3px 1rem
+    border none
+    letter-spacing 2px
+    cursor pointer
+    width 8rem
+    border-radius 0 0 3px 3px
+.advertisement
+  margin-top 1.3rem
+  background-color #ffffff
+  text-align center
+  height 12rem
+  img
+    height  100%
+</style>
