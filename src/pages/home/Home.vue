@@ -67,20 +67,12 @@ export default {
   created () {
     var _this = this,
       tab = _this.$route.query.tab,
-      akn,
-      expire
+      akn
     if (tab === undefined) {
       _this['all'] = true
     } else {
       _this[tab] = true
     }
-
-    //  由于此时还没做登录，所以在这直接写akn到cookie中
-    expire = new Date()
-    if (!Cookie.get('akn')) {
-      Cookie.set('akn', '11c07078-4695-4748-a40b-af35f152375e', expire.setTime(expire.getTime() + 30 * 24 * 60 * 60 * 1000), '/', 'localhost')
-    }
-
     //  获取作者信息
     if (Cookie.get('akn')) {
       akn = Cookie.get('akn')

@@ -1,7 +1,7 @@
 <template>
   <aside>
-    <div v-if="showInfo">
-      <button>请登录</button>
+    <div v-if="showInfo" class="login-panel">
+      <button @click="pageToLogin()">请登录</button>
     </div>
     <info-panel v-else :pageType='pageType' :pageInfo='pageInfo'></info-panel>
     <div v-if="pageType != 2" class="publish-topic">
@@ -10,13 +10,14 @@
     <aside class="advertisement">
       <img src="@/assets/logo.png" alt="picture" title="vuejs中文社区" @click="goToWeb()">
     </aside>
-    <topic-panel :topicList='pageInfo.recent_topics.slice(0, 5)' :topicType='"recent"'></topic-panel>
+    <topic-panel :topicList='pageInfo.recent_topics.slice(0, 5)' :topicType='"recent"' v-if="!showInfo"></topic-panel>
     <topic-panel :topicList='noReplyLIst.slice(0, 5)' :topicType='"noreply"'></topic-panel>
   </aside>
 </template>
 <script>
 import InfoPanel from './components/InfoPanel.vue'
 import TopicPanel from './components/TopicPanel.vue'
+import Cookie from '@/assets/js/cookie.js'
 export default {
   name: 'CommonSideBar.vue',
   props: {
@@ -54,18 +55,34 @@ export default {
   },
   created () {
     var _this = this
-    if (_this.pageType === 1 && _this.pageInfo === null) {
-      this.showInfo = false
+    if (_this.pageType === 1 && !Cookie.get('akn')) {
+      // 只有首页没登录的情况才设为true,其他都是false
+      _this.showInfo = true
+    } else {
+      _this.showInfo = false
     }
   },
   methods: {
     goToWeb () {
       window.location.href = 'https://www.vue-js.com/'
+    },
+    pageToLogin () {
+      this.$router.push({
+        path: '/login'
+      })
     }
   }
 }
 </script>
 <style lang="stylus" scoped>
+.login-panel
+  background-color #fff
+  text-align center
+  height 4rem
+  line-height 4rem
+  font-size 1.4rem
+  button
+    cursor pointer
 .publish-topic
   margin-top 1.3rem
   padding 1rem

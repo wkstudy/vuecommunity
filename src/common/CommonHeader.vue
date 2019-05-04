@@ -20,14 +20,36 @@
         <router-link to="/">My GitHub</router-link>
       </li>
       <li>
-        <router-link to="/">登录</router-link>
+        <router-link to="/login" v-if="status === 0">登录</router-link>
+        <a v-else href='javascript:void(0)' @click="clearCookie()">退出</a>
       </li>
     </nav>
   </header>
 </template>
 <script>
+import Cookie from '@/assets/js/cookie.js'
 export default {
-  name: 'CommonHeader.vue'
+  name: 'CommonHeader.vue',
+  data () {
+    return {
+      status: 0 // 0 代表未登录， 1代表已登录
+    }
+  },
+  created () {
+    if (Cookie.get('akn')) {
+      this.status = 1
+    } else {
+      this.status = 0
+    }
+  },
+  methods: {
+    clearCookie () {
+      Cookie.unset('akn')
+      this.status = 0
+      //  刷新页面
+      this.$router.go(0)
+    }
+  }
 }
 </script>
 <style scoped>
