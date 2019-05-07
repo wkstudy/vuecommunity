@@ -20,7 +20,7 @@ export default {
   name: 'HomePage.vue',
   data () {
     return {
-      total: 2,
+      total: 1,
       current: 1,
       list: 5
     }
@@ -33,37 +33,52 @@ export default {
       return this.total > 5 && this.current < this.total - 2
     }
   },
+  created () {
+    var _this = this,
+      page = _this.$route.query.page
+    if (page === undefined) {
+      _this.current = 1
+    } else {
+      _this.current = page
+    }
+  },
   watch: {
-    '$route.query' (obj) {
-      var _this = this
-      switch (obj.tab) {
-        case 'all':
-          _this.total = 41
-          break
-        case 'good':
-          _this.total = 1
-          break
-        case 'weex':
-          _this.total = 1
-          break
-        case 'share':
-          _this.total = 11
-          break
-        case 'ask':
-          _this.total = 28
-          break
-        case 'job':
-          _this.total = 2
-          break
-        default:
-          _this.total = 41 // 如果没有tab，表示时默认的all
-      }
-      if (obj.page === undefined) {
-        _this.current = 1
+    '$route.query.tab' (obj) {
+      var _this = this,
+        path = _this.$route.path
+      console.log('ssssssss' + obj)
+      if (obj !== undefined) {
+        //  主页
+        switch (obj) {
+          case 'all':
+            _this.total = 41
+            break
+          case 'good':
+            _this.total = 1
+            break
+          case 'weex':
+            _this.total = 1
+            break
+          case 'share':
+            _this.total = 11
+            break
+          case 'ask':
+            _this.total = 28
+            break
+          case 'job':
+            _this.total = 2
+            break
+          default:
+            console.log(obj)
+        }
+      } else if (path.indexOf('replies') !== -1 || path.indexOf('topics') !== -1) {
+        // 如果是用户创建的话题或者是用户回复的话题，由于没给相应的api，因此，假定都是1页
+        _this.total = 1
       } else {
-        _this.current = obj.page
+        // 如果没有tab，表示时默认的all
+        _this.total = 41
       }
-      console.log(22)
+      _this.current = 1 // 每次切换类别后都默认是第一页
     }
   },
   methods: {

@@ -53,18 +53,12 @@ export default {
     },
     goToTopic (val) {
       this.$router.push({
-        path: '/topic/id',
-        params: {
-          id: val
-        }
+        path: '/topic/' + val
       })
     },
     goToUser (name) {
       this.$router.push({
-        path: '/user/loginname',
-        params: {
-          loginname: name
-        }
+        path: '/user/' + name
       })
     }
   },

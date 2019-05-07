@@ -3,8 +3,8 @@
     <header>{{title}}</header>
     <div class="panel">
       <div class="base-info">
-        <img :src='pageInfo.avatar_url' alt="picture">
-        <span>{{pageInfo.loginname}}</span>
+        <img :src='pageInfo.avatar_url' alt="picture" @click="goToUser(pageInfo.loginname)">
+        <span @click="goToUser(pageInfo.loginname)">{{pageInfo.loginname}}</span>
       </div>
       <div class="score">积分：{{pageInfo.score}}</div>
       <div class="signature">{{signature}}</div>
@@ -44,6 +44,13 @@ export default {
         return '这家伙很懒，什么个性签名都没有留下。'
       }
     }
+  },
+  methods: {
+    goToUser (val) {
+      this.$router.push({
+        path: '/user/' + val
+      })
+    }
   }
 }
 </script>
@@ -65,6 +72,7 @@ header
     line-height 5rem
     img
       height 100%
+      cursor pointer
       width 5rem
       margin-right 1rem
     span

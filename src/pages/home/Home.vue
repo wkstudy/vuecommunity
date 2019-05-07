@@ -36,7 +36,7 @@ export default {
       ask: false,
       share: false,
       job: false,
-      pageType: 1, // 1表示首页，二表示话题页
+      pageType: 1, // 1表示首页，2表示话题页, 3表示用户页
       pageInfo: null
     }
   },

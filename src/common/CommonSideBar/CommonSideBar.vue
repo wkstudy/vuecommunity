@@ -10,11 +10,16 @@
     <aside class="advertisement">
       <img src="@/assets/logo.png" alt="picture" title="vuejs中文社区" @click="goToWeb()">
     </aside>
-    <topic-panel :topicList='pageInfo.recent_topics.slice(0, 5)' :topicType='"recent"' v-if="!showInfo"></topic-panel>
-    <topic-panel :topicList='noReplyLIst.slice(0, 5)' :topicType='"noreply"'></topic-panel>
+    <topic-panel :topicList='pageInfo.recent_topics.slice(0, 5)' :topicType='"recent"' v-if="!showInfo && pageType === 1 || pageType === 2"></topic-panel>
+    <topic-panel :topicList='noReplyLIst.slice(0, 5)' :topicType='"noreply"' v-if="pageType != 3"></topic-panel>
   </aside>
 </template>
 <script>
+/**
+  * pageType: 1 代表首页(/) 2 代表话题页(/topic) 3 代表用户页(/user)
+  * <topic-panel> recent_topics: pageType 登录状态的1 、2 显示,3不显示
+  * <topic-panel> noreply: pageType 1、2显示，3不显示
+*/
 import InfoPanel from './components/InfoPanel.vue'
 import TopicPanel from './components/TopicPanel.vue'
 import Cookie from '@/assets/js/cookie.js'
