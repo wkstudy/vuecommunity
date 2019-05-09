@@ -13,7 +13,11 @@
         <a href="javascript:void(0)" v-bind:class="{active: job}" @click="goToPage('job')">招聘</a>
       </nav>
       <home-list></home-list>
-      <home-page></home-page>
+      <common-pagination
+      :totalPage=totalPage
+      :currentPage=currentPage
+      v-on:current-change='currentChange'
+      ></common-pagination>
     </div>
   </div>
   <common-footer></common-footer>
@@ -22,8 +26,8 @@
 <script>
 import CommonHeader from '@/common/CommonHeader.vue'
 import CommonFooter from '@/common/CommonFooter.vue'
+import CommonPagination from '@/common/CommonPagination.vue'
 import HomeList from '@/pages/home/components/HomeList.vue'
-import HomePage from '@/pages/home/components/HomePage.vue'
 import CommonSideBar from '@/common/CommonSideBar/CommonSideBar.vue'
 import Cookie from '@/assets/js/cookie.js'
 export default {
@@ -37,23 +41,35 @@ export default {
       share: false,
       job: false,
       pageType: 1, // 1表示首页，2表示话题页, 3表示用户页
-      pageInfo: null
+      pageInfo: {},
+      pages: {
+        all: 41,
+        good: 1,
+        weex: 1,
+        ask: 28,
+        share: 11,
+        job: 2
+      }, // 预置各个分类的页数
+      totalPage: 0,
+      currentPage: 0
     }
   },
   components: {
     CommonHeader,
     CommonFooter,
     HomeList,
-    HomePage,
-    CommonSideBar
+    CommonSideBar,
+    CommonPagination
   },
   beforeRouteUpdate (to, from, next) {
     var _this = this,
       old = from.query.tab,
-      latest = to.query.tab
+      latest = to.query.tab,
+      page = to.query.page
     if (latest === undefined) {
       _this[old] = false
       _this['all'] = true
+      _this.totalPage = _this.pages.all
     } else {
       if (old === undefined) {
         _this['all'] = false
@@ -61,17 +77,34 @@ export default {
         _this[old] = false
       }
       _this[latest] = true
+      _this.totalPage = _this.pages[latest]
+    }
+    // 设置当前页数
+    if (page === undefined) {
+      _this.currentPage = 1
+    } else {
+      _this.currentPage = Number(page) // 坑,从url中获得的是字符串，一直提示我currentPage是字符串，我都找不到是什么原因
     }
     next()
   },
   created () {
     var _this = this,
       tab = _this.$route.query.tab,
+      page = _this.$route.query.page,
       akn
+    // 设置tab及其页数
     if (tab === undefined) {
       _this['all'] = true
+      _this.totalPage = _this.pages.all
     } else {
       _this[tab] = true
+      _this.totalPage = _this.pages[tab]
+    }
+    // 设置当前页数
+    if (page === undefined) {
+      _this.currentPage = 1
+    } else {
+      _this.currentPage = Number(page) // 坑,从url中获得的是字符串，一直提示我currentPage是字符串，我都找不到是什么原因
     }
     //  获取作者信息
     if (Cookie.get('akn')) {
@@ -103,6 +136,15 @@ export default {
           }
         })
       }
+    },
+    currentChange (num) {
+      var _this = this,
+        obj = JSON.parse(JSON.stringify(_this.$router.currentRoute.query)) // 这里我们需要的应该是值，因此必须转为深拷贝
+      Object.assign(obj, {page: num})
+      _this.current = num
+      _this.$router.push({
+        query: obj
+      })
     }
   }
 }

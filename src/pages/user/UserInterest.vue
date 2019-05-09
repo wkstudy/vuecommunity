@@ -9,7 +9,11 @@
           <span @click="goToUser()">{{loginname}}的主页</span>
         </header>
         <topic-list :topicType='3' :topicArr='pageInfo.recent_topics' :loginname='loginname'></topic-list>
-        <home-page></home-page>
+        <common-pagination
+        :totalPage=totalPage
+        :currentPage=currentPage
+        v-on:current-change='currentChange'
+        ></common-pagination>
       </div>
     </div>
     <common-footer></common-footer>
@@ -18,30 +22,51 @@
 <script>
 import CommonHeader from '@/common/CommonHeader.vue'
 import CommonFooter from '@/common/CommonFooter.vue'
+import CommonPagination from '@/common/CommonPagination.vue'
 import CommonSideBar from '@/common/CommonSideBar/CommonSideBar.vue'
 import TopicList from '@/pages/user/components/TopicList.vue'
-import HomePage from '@/pages/home/components/HomePage.vue'
 export default {
   name: 'UserInterest.vue',
   props: ['loginname'],
   components: {
     CommonHeader,
     CommonFooter,
+    CommonPagination,
     CommonSideBar,
-    TopicList,
-    HomePage
+    TopicList
   },
   data () {
     return {
       pageType: 3,
       pageInfo: {},
       topicType: 0,
-      topicArr: []
+      topicArr: [],
+      totalPage: 0,
+      currentPage: 0
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    var _this = this,
+      page = to.query.page
+    // 设置当前页数
+    if (page === undefined) {
+      _this.currentPage = 1
+    } else {
+      _this.currentPage = Number(page) // 坑,从url中获得的是字符串，一直提示我currentPage是字符串，我都找不到是什么原因
+    }
+    next()
+  },
   created () {
-    var _this = this
+    var _this = this,
+      page = this.$route.query.page
     _this.getUser(_this.loginname)
+    _this.totalPage = 1 // 由于每个用于参与多少话题的api，因此这里统一设为1页
+    // 设置当前页数
+    if (page === undefined) {
+      _this.currentPage = 1
+    } else {
+      _this.currentPage = Number(page) // 坑,从url中获得的是字符串，一直提示我currentPage是字符串，我都找不到是什么原因
+    }
   },
   methods: {
     getUser (name) {
@@ -69,6 +94,15 @@ export default {
     goToIndex () {
       this.$router.push({
         path: '/'
+      })
+    },
+    currentChange (num) {
+      var _this = this,
+        obj = JSON.parse(JSON.stringify(_this.$router.currentRoute.query)) // 这里我们需要的应该是值，因此必须转为深拷贝
+      Object.assign(obj, {page: num})
+      _this.current = num
+      _this.$router.push({
+        query: obj
       })
     }
   }

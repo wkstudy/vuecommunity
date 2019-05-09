@@ -63,17 +63,17 @@ export default {
     }
   },
   beforeCreate () {
-    console.log('bc')
+    // console.log('bc')
   },
   created () {
-    console.log('c')
+    // console.log('c')
     this.now = new Date()
   },
   beforeMount () {
-    console.log('bm')
+    // console.log('bm')
   },
   mounted () {
-    console.log('m')
+    // console.log('m')
     var _this = this,
       tab = _this.$route.query.tab
     if (tab === undefined) {
@@ -83,16 +83,16 @@ export default {
     }
   },
   beforeUpdate () {
-    console.log('bu')
+    // console.log('bu')
   },
   updated () {
-    console.log('u')
+    // console.log('u')
   },
   beforeDestroy () {
-    console.log('bd')
+    // console.log('bd')
   },
   destroyed () {
-    console.log('d')
+    // console.log('d')
   }
 }
 </script>
