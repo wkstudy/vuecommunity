@@ -45,6 +45,8 @@ export default {
   methods: {
     clearCookie () {
       Cookie.unset('akn')
+      Cookie.unset('username')
+      this.$store.commit('setUser') // 设置state中username为undefined
       this.status = 0
       //  刷新页面
       this.$router.go(0)

@@ -73,6 +73,11 @@ export default {
       _this.$router.push({
         path: '/user/' + _this.$parent.loginname + '/' + str
       })
+    },
+    goToTopic (id) {
+      this.$router.push({
+        path: '/topic/' + id
+      })
     }
   }
 }

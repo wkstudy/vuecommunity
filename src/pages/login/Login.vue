@@ -45,6 +45,9 @@ export default {
         if (response.status === 200) {
           expire = new Date()
           Cookie.set('akn', akn, expire.setTime(expire.getTime() + 30 * 24 * 60 * 60 * 1000), '/', 'localhost')
+          Cookie.set('username', response.data.loginname, expire.setTime(expire.getTime() + 30 * 24 * 60 * 60 * 1000), '/', 'localhost')
+          _this.$store.commit('setUser', response.data.loginname)
+          console.log(_this.$store.state.username)
           // 返回到主页
           _this.$router.push({
             path: '/'

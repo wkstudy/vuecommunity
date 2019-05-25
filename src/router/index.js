@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/pages/Home/Home.vue'
 import Login from '@/pages/login/Login.vue'
 import User from '@/pages/user/User.vue'
+import Topics from '@/pages/topics/Topics.vue'
 import UserInterest from '@/pages/user/UserInterest.vue'
 
 Vue.use(Router)
@@ -35,6 +36,12 @@ export default new Router({
       path: '/user/:loginname/replies',
       name: 'UserInterest',
       component: UserInterest,
+      props: true
+    },
+    {
+      path: '/topic/:id',
+      name: 'Topics',
+      component: Topics,
       props: true
     }
   ]

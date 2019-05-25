@@ -5,6 +5,7 @@ import App from './App'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router'
+import store from './store/index.js'
 
 import '@/assets/styles/normalize.css'
 import '@/assets/styles/animate.css'
@@ -44,6 +45,7 @@ Vue.filter('cancelTime', function (old, now) {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
