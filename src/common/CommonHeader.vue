@@ -13,17 +13,37 @@
       <li>
         <router-link to="/">首页</router-link>
       </li>
-      <li>
-        <router-link to="/">未读消息</router-link>
+      <li v-show='status === 1'>
+        <router-link to="/my/message">未读消息</router-link>
       </li>
       <li>
-        <router-link to="/">My GitHub</router-link>
+        <a href='javascript:void(0)' @click="showModal">My GitHub</a>
       </li>
       <li>
         <router-link to="/login" v-if="status === 0">登录</router-link>
         <a v-else href='javascript:void(0)' @click="clearCookie()">退出</a>
       </li>
     </nav>
+    <!-- 模态框 -->
+    <transition>
+      <div class="modal" @click="hideModal" v-show="show"></div>
+    </transition>
+    <transition name="fade" :duration="{leave: 200}">
+      <div
+        class="modal-body"
+        v-show="show"
+      >
+      <div>
+        <img
+          src="@/assets/imgs/githubicon.svg"
+          alt="wkstudy"
+          title="click it"
+          @click="goToGithub"
+        >
+      </div>
+      <h3>welcome to my GitHub</h3>
+      </div>
+    </transition>
   </header>
 </template>
 <script>
@@ -32,7 +52,8 @@ export default {
   name: 'CommonHeader.vue',
   data () {
     return {
-      status: 0 // 0 代表未登录， 1代表已登录
+      status: 0, // 0 代表未登录， 1代表已登录,
+      show: false
     }
   },
   created () {
@@ -50,6 +71,15 @@ export default {
       this.status = 0
       //  刷新页面
       this.$router.go(0)
+    },
+    showModal () {
+      this.show = true
+    },
+    hideModal () {
+      this.show = false
+    },
+    goToGithub () {
+      location.href = 'https://github.com/wkstudy'
     }
   }
 }
@@ -87,7 +117,7 @@ header > div{
   line-height: 2.5rem;
 }
 .header-search span {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 .header-search input {
   border: none;
@@ -115,5 +145,45 @@ nav li a {
   text-decoration: none;
   font-size: 1.6rem;
   color: #fff;
+}
+.modal {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  z-index: 1;
+  position: fixed;
+  background-color: #000;
+  opacity: .5;
+}
+.modal-body {
+  width: 20rem;
+  height: 20rem;
+  border-radius: 7px;
+  background-color: #fff;
+  position: fixed;
+  text-align: center;
+  z-index: 2;
+  top: 30%;
+  left: calc(50% - 10rem);
+}
+.modal-body img {
+  width: 8rem;
+  height: 8rem;
+  cursor: pointer;
+  position: absolute;
+  top: 5rem;
+  left: 6rem;
+}
+.modal-body h3 {
+  position: absolute;
+  bottom: 1rem
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all 1s;
+}
+.fade-enter, .fade-leave-to {
+  top: 0%;
 }
 </style>

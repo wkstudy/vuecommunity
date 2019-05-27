@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/pages/Home/Home.vue'
 import Login from '@/pages/login/Login.vue'
 import User from '@/pages/user/User.vue'
+import Message from '@/pages/message/Message.vue'
 import Topics from '@/pages/topics/Topics.vue'
 import UserInterest from '@/pages/user/UserInterest.vue'
 import PublishTopic from '@/pages/publish/PublishTopic.vue'
@@ -49,6 +50,11 @@ export default new Router({
       name: 'Topics',
       component: Topics,
       props: true
+    },
+    {
+      path: '/my/message',
+      name: 'Message',
+      component: Message
     }
   ]
 })
