@@ -76,6 +76,17 @@ export default {
       var _this = this,
         user = _this.topicInfo.author.loginname
       _this.getUser(user, _this.storageTopicInfo)
+    },
+    id () {
+      var _this = this
+      _this.getTopic(_this.id)
+      // 查看是否登录
+      if (Cookie.get('akn')) {
+        _this.login = true
+        _this.getUser(_this.$store.state.username, _this.storageCollectArr) // 用于之后获取用户的收藏列表
+      } else {
+        _this.login = false
+      }
     }
   },
   methods: {

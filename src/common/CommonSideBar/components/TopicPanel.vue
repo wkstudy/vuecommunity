@@ -33,10 +33,7 @@ export default {
   methods: {
     goToTopic (id) {
       this.$router.push({
-        path: '/topic',
-        query: {
-          id: id
-        }
+        path: '/topic/' + id
       })
     }
   }

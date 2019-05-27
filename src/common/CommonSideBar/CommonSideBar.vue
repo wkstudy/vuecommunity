@@ -4,8 +4,10 @@
       <button @click="pageToLogin()">请登录</button>
     </div>
     <info-panel v-else :pageType='pageType' :pageInfo='pageInfo'></info-panel>
-    <div v-if="pageType != 2" class="publish-topic">
-      <button>发布话题</button>
+    <div v-if="pageType != 2 && $store.state.username" class="publish-topic">
+      <button
+        @click='goToTopicCreate'
+      >发布话题</button>
     </div>
     <aside class="advertisement">
       <img src="@/assets/logo.png" alt="picture" title="vuejs中文社区" @click="goToWeb()">
@@ -74,6 +76,11 @@ export default {
     pageToLogin () {
       this.$router.push({
         path: '/login'
+      })
+    },
+    goToTopicCreate () {
+      this.$router.push({
+        path: '/topic/create'
       })
     }
   }

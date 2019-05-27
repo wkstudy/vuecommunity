@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router'
 import store from './store/index.js'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 
 import '@/assets/styles/normalize.css'
 import '@/assets/styles/animate.css'
@@ -13,6 +14,7 @@ import '@/assets/styles/base.css'
 import '@/assets/styles/iconfont.css'
 
 Vue.use(VueAxios, axios)
+Vue.use(CKEditor)
 Vue.config.productionTip = false
 
 Vue.filter('cancelTime', function (old, now) {

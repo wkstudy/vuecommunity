@@ -5,6 +5,7 @@ import Login from '@/pages/login/Login.vue'
 import User from '@/pages/user/User.vue'
 import Topics from '@/pages/topics/Topics.vue'
 import UserInterest from '@/pages/user/UserInterest.vue'
+import PublishTopic from '@/pages/publish/PublishTopic.vue'
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
       name: 'UserInterest',
       component: UserInterest,
       props: true
+    },
+    {
+      path: '/topic/create',
+      name: 'PublishTopic',
+      component: PublishTopic
     },
     {
       path: '/topic/:id',
