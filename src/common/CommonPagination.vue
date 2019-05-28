@@ -4,12 +4,18 @@
   >
     <li :class="[{forbid: current === 1}, 'prev']">&laquo;</li>
     <li :class="{active:current === 1}">1</li>
-    <li v-if="1 !== pages[0] - 1">...</li>
+    <li 
+      v-if="1 !== pages[0] - 1"
+      class="default"
+    >...</li>
     <li v-for="val in pages"
       :key="val"
       :class="{active:current === val}"
     >{{val}}</li>
-    <li v-if="pages[pages.length - 1] !== totalPage - 1">...</li>
+    <li
+      v-if="pages[pages.length - 1] !== totalPage - 1"
+      class="default"
+    >...</li>
     <li :class="{active:current === totalPage}">{{totalPage}}</li>
     <li :class="[{forbid: current === totalPage}, 'next']">&raquo;</li>
   </ul>
@@ -87,6 +93,8 @@ export default {
           _this.current++
           _this.$emit('current-change', _this.current)
         }
+      } else if (el.classList.contains('default')) {
+        // 省略号什么也不触发
       } else {
         _this.current = Number(el.innerHTML)
         _this.$emit('current-change', _this.current)
@@ -100,6 +108,8 @@ export default {
   color green
 .forbid
   cursor no-drop
+.default
+  cursor default
 ul
   margin-top 0
   padding-top 1rem
