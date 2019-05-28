@@ -4,7 +4,7 @@
   >
     <li :class="[{forbid: current === 1}, 'prev']">&laquo;</li>
     <li :class="{active:current === 1}">1</li>
-    <li 
+    <li
       v-if="1 !== pages[0] - 1"
       class="default"
     >...</li>
